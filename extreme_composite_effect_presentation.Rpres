@@ -1,0 +1,943 @@
+
+
+```{r setup, include=FALSE}
+opts_chunk$set(cache=TRUE, echo=FALSE, fig.width = 6, fig.asp = 0.618, out.width = "70%", fig.align = "center")
+
+options(scipen = 999)
+
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(formattable)
+library(gganimate)
+
+source("shiny_helper_functions.R")
+
+  ## Functions used
+    ###*** Prints tables nicely
+#   table_print <- function(df, colnames = "", caption = "", ...){
+#     colnames <- case_when(
+#       colnames == "" ~ pretty_columns_func(colnames(df)),
+#       TRUE ~ colnames
+#     )
+#       df %>%
+#         kable(caption = caption, col.names = colnames) %>%
+#         kable_options(., ...)
+#      }
+# 
+#   # Prettify column names
+#   pretty_columns_func <- function(colnames){
+#     tools::toTitleCase(gsub("[_|.]", " ", colnames))
+#   }
+# }
+```
+
+Extreme Composite Effect Presentation
+========================================================
+author: Brian Syzdek
+date: `r Sys.Date()`
+autosize: true
+transition: none
+
+<style>
+.small-code pre code {
+  font-size: 1em;
+}
+</style>
+
+Scenario- Testing with Leiter-3
+========================================================
+
+```{r test_table}
+
+leiter_mock_data <- tibble(
+    subtest_names = c("Figure Ground", "Form Completion", "Classification/Analogies", "Sequential Order"),
+    scaled_scores = c(8, 8, 8, 8),
+    label = rep("Average", 4)
+)
+
+leiter_mock_data  %>%
+  table_print(caption = "NVIQ Subtests") %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+  # Scaled score descriptions
+tibble(
+  mean = 10,
+  SD = 3
+) %>% table_print(caption = "Scaled Scores")
+
+```
+
+***
+
+
+Scenario- Testing with Leiter-3
+========================================================
+
+```{r test_table_composite}
+  # Resulting NVIQ obtained from leiter manual
+nviq <- tibble(
+  composite = "Nonverbal IQ",
+  index_score = 81,
+  label = "Below Average"
+)
+
+leiter_mock_data  %>%
+  table_print(caption = "NVIQ Subtests") %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+```
+
+***
+
+```{r nviq}  
+nviq  %>%
+  table_print(caption = "NVIQ") %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+tibble(
+  mean = 100,
+  SD = 15
+) %>% table_print(caption = "Standard Scores")
+
+```
+
+
+Scenario- Testing with Leiter-3
+========================================================
+
+## How can subtest scores be average, but index score is below average?
+
+***
+
+```{r test_table_composite_question}
+leiter_mock_data  %>%
+  table_print(caption = "NVIQ Subtests") %>% 
+  column_spec(1:3, width = '50em') %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+```
+
+***
+
+```{r nviq_question}  
+nviq  %>%
+  table_print(caption = "NVIQ") %>% 
+  column_spec(1:3, width = '50em') %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+```
+
+
+Expected Phenomenon
+========================================================
+Explanation to Clinician
+
+Expected Phenomenon
+========================================================
+Explanation to Clinician
+
+1. Regression to the Mean
+
+Expected Phenomenon
+========================================================
+Explanation to Clinician
+
+1. Regression to the Mean
+2. Calculation of Index Scores
+
+Expected Phenomenon
+========================================================
+Explanation to Clinician
+
+1. Regression to the Mean
+2. Calculation of Index Scores
+3. Geometric Interpretation
+
+Expected Phenomenon
+========================================================
+Explanation to Clinician
+
+1. Regression to the Mean
+2. Calculation of Index Scores
+3. Geometric Interpretation
+
+Explanation to Stakeholders
+
+Regression to the Mean
+========================================================
+
+- Category label = convenience and understandability
+
+***
+
+Regression to the Mean
+========================================================
+
+- Category label = convenience and understandability
+- Continuous variables -> categories = loss of information
+
+***
+
+```{r leiter_table}
+  # Show interpretation of subtests and index
+tibble(
+  source = c("Subtest", "Index"),
+  score = c("8 - 12", "90 - 109"),
+  interpretation = rep("Average", 2)
+) %>% 
+  table_print(caption = "Test Interpretation Labels")
+
+```
+
+Subtest scores of 8 and 12 are both "Average," but are different (8 = "Low Average")
+
+Regression to the Mean
+========================================================
+
+- Subtests and composites are normed separately
+
+Regression to the Mean
+========================================================
+
+- Subtests and composites are normed separately
+- It is not unusual to score "Low Average" on one subtest
+
+Regression to the Mean
+========================================================
+
+- Subtests and composites are normed separately
+- It is not unusual to score "Low Average" on one subtest
+- It is more unusual for that pattern on several subtests
+: Multiple "Low Average" results -> "Below Average" overall
+
+Calculation of Index Scores
+========================================================
+
+$$
+  \text{standardized score} = \frac{x-\mu}{\sigma} = \frac{\text{difference from mean}}{sd}
+$$
+
+
+Calculation of Index Scores
+========================================================
+
+$$\text{standardized score} = \frac{x-\mu}{\sigma} = \frac{\text{difference from mean}}{sd}$$
+
+$$\text{scaled score} = \frac{score - 10}{3}$$
+
+Calculation of Index Scores
+========================================================
+
+$$\text{standardized score} = \frac{x-\mu}{\sigma} = \frac{\text{difference from mean}}{sd}$$
+
+$$\text{scaled score} = \frac{score - 10}{3}$$
+
+$$\frac{\text{subtest raw score } - \text{subtest mean}}{\text{subtest sd}} = \frac{\text{scaled score} - 10}{3}$$
+
+Calculation of Index Scores
+========================================================
+class: small-code
+
+$$\frac{\text{subtest raw score } - \text{subtest mean}}{\text{subtest sd}} = \frac{\text{scaled score} - 10}{3}$$
+
+```{r scaled_score_conversion, echo = T}
+  # Rescale scores function
+standardized_score_function <- function(
+  raw_score, 
+  subtest_mean, 
+  subtest_sd, 
+  standardized_mean, 
+  standardized_sd)
+  {
+    (
+      (raw_score - subtest_mean) / 
+        subtest_sd
+      ) * standardized_sd + standardized_mean
+  }
+
+```
+
+Calculation of Index Scores
+========================================================
+class: small-code
+
+Subtest 1: 
+- M = 20
+- SD = <span style="color:red">5</span>
+- raw score = 10
+
+#### Subtest 1
+
+```{r subtest_1_standardization, echo = T}
+  # Example to show result of different SD
+standardized_score_function(
+  raw_score = 10, 
+  subtest_mean = 20, 
+  subtest_sd = 5, 
+  standardized_mean = 10, 
+  standardized_sd = 3
+  ) %>% 
+  {print(paste("Subtest 1 scaled score:", .))}
+```
+
+***
+
+Subtest 2
+- M = 20 
+- SD = <span style="color:red">10</span>
+- raw score = 10
+
+#### Subtest 2
+
+```{r subtest_2_standardization, echo = T}
+standardized_score_function(
+  raw_score = 10, 
+  subtest_mean = 20, 
+  subtest_sd = 10, 
+  standardized_mean = 10, 
+  standardized_sd = 3
+  ) %>% 
+  {print(paste("Subtest 2 scaled score:", .))}
+```
+
+Calculation of Index Scores
+========================================================
+
+Smaller relative SD -> More extreme standardized score
+
+$$\frac{\text{difference from mean}_\text{raw}}{ {SD}_\text{raw} \color{red} {smaller}} = \frac{\text{difference from mean}_\text{standardized}}{\text{SD}_\text{standardized}}$$
+
+
+Calculation of Index Scores
+========================================================
+
+$$\frac{\text{difference from mean}_\text{raw}}{ {SD}_\text{raw} \color{red} {smaller}} = $$ 
+*** 
+
+$$\frac{\text{difference from mean}_\text{standardized}}{\text{SD}_\text{standardized}}$$
+
+Calculation of Index Scores
+========================================================
+
+$$\frac{\text{difference from mean}_\text{raw}}{ {SD}_\text{raw} \color{red} {smaller}} = $$
+
+\[ \color{red} {Overall Increase} \]
+
+*** 
+
+$$\frac{\text{difference from mean}_\text{standardized}}{\text{SD}_\text{standardized}}$$
+
+Calculation of Index Scores
+========================================================
+
+$$\frac{\text{difference from mean}_\text{raw}}{ {SD}_\text{raw} \color{red} {smaller}} = $$
+
+\[ \color{red} {Overall Increase} \]
+
+*** 
+
+$$\frac{\text{difference from mean}_\text{standardized}}{\text{SD}_\text{standardized}}$$
+
+This side must increase to preserve equality, but SD is fixed
+
+Calculation of Index Scores
+========================================================
+
+$$\frac{\text{difference from mean}_\text{raw}}{ {SD}_\text{raw} \color{red} {smaller}} = $$
+
+\[ \color{red} {Overall Increase} \]
+
+*** 
+
+$$\frac{\text{difference from mean}_\text{standardized} \color {red} {Increase}}{\text{SD}_\text{standardized}}$$
+
+This side must increase to preserve equality, but SD is fixed
+
+Calculation of Index Scores
+========================================================
+
+$$\frac{\text{difference from mean}_\text{raw}}{ {SD}_\text{raw} \color{red} {smaller}} = $$
+
+\[ \color{red} {Overall Increase} \]
+
+*** 
+
+$$\frac{\text{difference from mean}_\text{standardized} \color {red} {Increase}}{\text{SD}_\text{standardized}}$$
+
+This side must increase to preserve equality, but SD is fixed
+
+## $${SD}\text{combined} \leq {SD}\text{sum}$$
+
+Calculation of Index Scores
+========================================================
+
+Standardization of two subtests is similar to one subtest
+
+$$\frac{Sum(\text{subtest raw score}_\text{each} - \text{subtest mean}_\text{each})}{\text{subtest sd}_\text{combined}}$$
+
+Calculation of Index Scores
+========================================================
+
+$$\frac{Sum(\text{subtest raw score}_\text{each} - \text{subtest mean}_\text{each})}{\text{subtest sd}_\text{combined}}$$
+
+$$\text{subtest sd}_\text{combined} = \sqrt{Var_{sub_1} + Var_{sub_2} + \boldsymbol{2*Cov_{sub_1/sub_2}}}$$
+
+Calculation of Index Scores
+========================================================
+
+$$\frac{Sum(\text{subtest raw score}_\text{each} - \text{subtest mean}_\text{each})}{\text{subtest sd}_\text{combined}}$$
+
+$$\text{subtest sd}_\text{combined} = \sqrt{Var_{sub_1} + Var_{sub_2} + \boldsymbol{2*Cov_{sub_1/sub_2}}}$$
+
+This combined SD can be shown be shown by combining variance of each subtest and expanding (FOIL)
+
+$$\frac{\sum_i((x_i - \mu_x) + (y_i - \mu_y))^2}{N} =$$ 
+$$\frac{\sum_i((x_i - \mu_x)^2 + (y_i - \mu_y))^2 + 2(x_i - \mu_x)(y_i - \mu_y)))}{N} \\$$
+
+Calculation of Index Scores
+========================================================
+
+Combined variance of two subtests = $$Variance_{sub_1} + Variance_{sub_2} + \boldsymbol{2*Covariance_{sub_1/sub_2}}$$
+
+Calculation of Index Scores
+========================================================
+
+Combined variance of two subtests = $$Variance_{sub_1} + Variance_{sub_2} + \boldsymbol{2*Covariance_{sub_1/sub_2}}$$
+
+- Covariance cannot be greater than variance of subtests
+
+- If Covariance = Variance, and all variances are equal
+$${SD}_\text{combined} = \sqrt{Var_{sub_\text{all}} + Var_{sub_\text{all}} + 2 * \color {red} {Var} _{sub_\text{all}}}$$
+
+Calculation of Index Scores
+========================================================
+
+Combined variance of two subtests = $$Variance_{sub_1} + Variance_{sub_2} + \boldsymbol{2*Covariance_{sub_1/sub_2}}$$
+
+- Covariance cannot be greater than variance of subtests
+
+- If Covariance = Variance, and all variances are equal
+$${SD}_\text{combined} = \sqrt{Var_{sub_\text{all}} + Var_{sub_\text{all}} + 2 * \color {red} {Var} _{sub_\text{all}}}$$
+
+$$= \sqrt{4*\color{red}{Var}_{sub_\text{all}}}$$
+
+Calculation of Index Scores
+========================================================
+
+Combined variance of two subtests = $$Variance_{sub_1} + Variance_{sub_2} + \boldsymbol{2*Covariance_{sub_1/sub_2}}$$
+
+- Covariance cannot be greater than variance of subtests
+
+- If Covariance = Variance, and all variances are equal
+$${SD}_\text{combined} = \sqrt{Var_{sub_\text{all}} + Var_{sub_\text{all}} + 2 * \color {red} {Var} _{sub_\text{all}}}$$
+
+$$= \sqrt{4*\color{red}{Var}_{sub_\text{all}}}$$
+$$= 2SD $$
+
+Calculation of Index Scores
+========================================================
+
+In this same case, consider the same score difference from mean on the two subtests
+
+$$\frac{Sum(\text{subtest raw score}_\text{each} - \text{subtest mean}_\text{each})}{\text{subtest sd}_\text{combined}}$$
+
+Calculation of Index Scores
+========================================================
+
+One subtest
+
+$$\frac{\text{Difference from mean}}{\text{subtest sd}}$$
+
+***
+
+Two subtests
+
+$$\frac{2 * \text{Difference from mean}}{2 * \text{subtest sd}_\text{combined}}$$
+
+Calculation of Index Scores
+========================================================
+
+One subtest
+
+$$\frac{\text{Difference from mean}}{\text{subtest sd}}$$
+
+***
+
+Two subtests
+
+$$\frac{2 * \text{Difference from mean}}{2 * \text{subtest sd}_\text{combined}}$$
+
+## Equivalent ...
+
+but this is when subtests are perfectly correlated. As correlation decreases, SD decreases, and composite is more extreme.
+
+Calculation of Index Scores
+========================================================
+
+Combined variance of two subtests = $$Variance_{sub_1} + Variance_{sub_2} + \boldsymbol{2*Covariance_{sub_1/sub_2}}$$
+
+- Covariance cannot be greater than variance of subtests
+
+
+Calculation of Index Scores
+========================================================
+
+$$\mathrm{COR}\left(X,Y\right)=\frac{\mathrm{COV} \left(X,Y\right)}{\sqrt{Var\left(X\right)\cdot V a r\left(Y\right)}}$$
+
+- When variances equal, alternative form:
+
+$${\sigma_{composite}} = \frac{\sqrt{2 + 2{\rho}}}{2}{\sigma_{pooled}}$$
+
+Calculation of Index Scores
+========================================================
+class: small-code
+
+Appendix I: Age 7 
+- FC:FG correlation = .73 
+- FG SD = 3.3 
+- FC SD = 4.5
+
+$$.73=\frac{\mathrm{COV} \left(X,Y\right)}{\sqrt{3.3^2\cdot4.5^2}}$$
+
+*** 
+
+```{r covariance_func, echo = T}
+  # Obtain covariance from variance and sd
+covariance_func <- function(
+  correlation, 
+  subtest_1_sd, 
+  subtest_2_sd)
+  {
+    correlation * 
+    sqrt(
+      subtest_1_sd**2 * 
+        subtest_2_sd**2
+      )
+  } 
+```
+
+FG FC covariance = `r round(covariance_func(.73, 3.3, 4.5),2)`
+
+Calculation of Index Scores
+========================================================
+class: small-code
+
+Combined variance of two subtests = $$Variance_{sub_1} + Variance_{sub_2} + \boldsymbol{2*Covariance_{sub_1/sub_2}}$$
+
+```{r combined_variance_func, echo = T}
+  # Combine variances using covariance, from previous function
+combined_variance_func <- function(
+  correlation,
+  subtest_1_sd,
+  subtest_2_sd)
+  {
+    subtest_1_sd**2 +
+    subtest_2_sd**2 +
+    2 * covariance_func(correlation, subtest_1_sd, subtest_2_sd)
+  }
+
+```
+
+FG FC combined variance = `r combined_variance_func(.73, 3, 4)`
+
+Calculation of Index Scores
+========================================================
+
+Two subtests to scaled score:
+
+$$\frac{(\text{subtest raw score}_\text{each} - \text{subtest mean}_\text{each})}{\text{subtest sd}_\text{combined}} = \frac{\text{scaled score} - 10}{3}$$
+
+$$\frac{(8 - 10) + (8-10)}{\sqrt{`r combined_variance_func(.73, 3, 4)`}} = \frac{\text{scaled score} - 10}{3}$$
+
+Calculation of Index Scores
+========================================================
+class: small-code
+
+```{r combined_subtest_standardized_score, echo = T}
+  # Rescale composite on original subtest scale of two subtests
+combined_subtest_standardized_score_func <- function(
+  raw_score_subtest_1, 
+  raw_score_subtest_2, 
+  mean_subtest_1, 
+  mean_subtest_2, 
+  correlation, 
+  subtest_1_sd, 
+  subtest_2_sd, 
+  standardized_mean, 
+  standardized_sd){
+    (
+      (
+        (raw_score_subtest_1 + raw_score_subtest_2) - 
+          (mean_subtest_1 + mean_subtest_2)
+      ) / 
+        sqrt(
+          combined_variance_func(correlation, subtest_1_sd, subtest_2_sd)
+            )
+    ) * standardized_sd + standardized_mean
+}
+```
+
+*** 
+
+#### Combined score of FG and FC
+
+`r combined_subtest_standardized_score_func(raw_score_subtest_1 = 8, raw_score_subtest_2 = 8, mean_subtest_1 = 10, mean_subtest_2 = 10, correlation = .73, subtest_1_sd = 3, subtest_2_sd = 3, standardized_mean = 10, standardized_sd = 3) %>% round(., 2)`
+
+Calculation of Index Scores
+========================================================
+class: small-code
+
+```{r combined_variance_all_cog, echo = T}
+# Correlations and SD's averaged across ages
+all_correlations <- c(.33, .40, .39, .54, .43, .47)
+all_subtest_sd <- c(3.2, 3.4, 3.6, 3.3)
+all_sd_subtest_1 <- c(rep(3.2, 3), rep(3.4, 2), 3.6)
+all_sd_subtest_2 <- c(3.4,3.6,3.3, 3.6, 3.3, 3.3)
+
+  # Apply the covariance function to get variance/covariance matrix
+(mapply(covariance_func, 
+        all_correlations, 
+        all_sd_subtest_1, 
+        all_sd_subtest_2
+       ) %>% 
+      # Combined variance as sum of variances and covariances
+    sum() *2 + sum(sapply(all_subtest_sd, function(x) x**2))) %>% 
+    sqrt -> all_combined_variance
+  # -8 is sum of four subtest score difference from mean: 4(8 - 10)
+(-8 / all_combined_variance) * 15 + 100 -> index_score
+
+```
+
+*** 
+
+Consider 4 subtests with scores of 8
+
+The NVIQ score in this case is `r trunc(index_score)`
+
+Geometric Interpretation
+========================================================
+
+Cosine of angle between two vectors is equal to standardized Pearson correlation
+
+$$\cos\theta = \frac{a\cdot b}{\lVert{a}\rVert \, \lVert{b}\rVert}$$
+
+Geometric Interpretation
+========================================================
+
+
+```{r vectors, out.width = "60%", out.height = "60%"}
+  # Functions to convert degrees to radians and vice versa
+rad2deg = function(rad) {
+   return((180 * rad) / pi)
+}
+
+deg2rad = function(deg) {
+     return((pi * deg) / 180)
+ }
+  ###*** GGanimate of vectors showing increased angle -> decrease correlation and 
+  ###*calculate composite vector
+p1 <- tibble(
+          # These give coordinates for end of vectors to be joined with geom_segment
+        subtest_1_x = rep(((cos(deg2rad(1:90)))*2 + 10), 3),
+        subtest_1_y = rep((sqrt(4 - ((cos(deg2rad(1:90)))*2)**2) + 10), 3),
+        composite_x = rep(rep(12, 90),3),
+        composite_y = rep((tan(deg2rad((1:90)/2))*2) + 10, 3),
+          # Correlation and corresponding degrees, to be output as text
+        correlation = rep(cos(deg2rad(1:90)), 3),
+        degrees = rep(1:90, 3),
+          # Length of composite vector
+        composite_length = rep((2 / cos(deg2rad((1:90)/2))) + 10, 3),
+          # Vector origins
+        x = rep(10, 270),
+        y = rep(10,270),
+          # Gives endpoint of each vector, to be separated by measures (3)
+        xend = c(((cos(deg2rad(1:90)))*2 + 10),
+                  rep(12, 90),
+                  rep(12,90)),
+        yend = c((sqrt(4 - ((cos(deg2rad(1:90)))*2)**2) + 10),
+                 (tan(deg2rad((1:90)/2))*2) + 10,
+                 rep(10, 90)),
+        measure = factor(c(rep("Subtest 1", 90),
+                           rep("Composite", 90),
+                           rep("Subtest 2", 90)),
+                         levels = c("Subtest 1",
+                                    "Composite",
+                                    "Subtest 2")),
+        time = c(1:90, 1:90, 1:90)
+      ) %>%
+            # Create coordinate system with 10,10 as origin
+          ggplot(aes(x,y)) +
+            # x and y axes
+          geom_hline (yintercept = 10, size = 1) +
+          geom_vline (xintercept = 10, size = 1) +
+            # 3 vectors, grouped by measure
+          geom_segment(aes(x = x, y = y, xend = xend, yend = yend, color = measure),
+                       arrow=arrow(length = unit(0.5,"cm"),angle=20),
+                       lineend = "butt", linejoin = "round") +
+            # Joins ends of three vectors to show perpendicular
+          geom_segment(aes(x = xend, y = yend, xend = composite_x, yend = composite_y)) +
+            # Outputs correlation of subtests at each degree
+          geom_text(aes(x = 11, y = 9.9,
+                        label = paste0("Subtest correlation = cos(",
+                                       degrees, ")= ", round(correlation,2)))) +
+            # Composite length
+          geom_text(aes(x = 12.3, y = composite_y,
+                        label = paste("Composite = \n", round(composite_length, 2)))) +
+          coord_cartesian(xlim = c(10, 12.6)) + scale_y_continuous(limits = c(9.5, 12.6)) +
+            # gganimate
+          transition_time(time) +
+          ease_aes('linear')
+  animate(p1)
+```
+
+
+Geometric Interpretation
+========================================================
+class: small-code
+
+```{r vectors_ggplot_plot_only, out.width = "60%"}
+  # Same plot as above, just at the correlation used in example
+        tibble(
+          # These give coordinates for end of vectors to be joined with geom_segment
+        subtest_1_x = rep(((cos(deg2rad(1:90)))*2 + 10), 3),
+        subtest_1_y = rep((sqrt(4 - ((cos(deg2rad(1:90)))*2)**2) + 10), 3),
+        composite_x = rep(rep(12, 90),3),
+        composite_y = rep((tan(deg2rad((1:90)/2))*2) + 10, 3),
+          # Correlation and corresponding degrees, to be output as text
+        correlation = rep(cos(deg2rad(1:90)), 3),
+        degrees = rep(1:90, 3),
+          # Length of composite vector
+        composite_length = rep((2 / cos(deg2rad((1:90)/2))) + 10, 3),
+          # Vector origins
+        x = rep(10, 270),
+        y = rep(10,270),
+          # Gives endpoint of each vector, to be separated by measures (3)
+        xend = c(((cos(deg2rad(1:90)))*2 + 10), 
+                  rep(12, 90), 
+                  rep(12,90)),
+        yend = c((sqrt(4 - ((cos(deg2rad(1:90)))*2)**2) + 10), 
+                 (tan(deg2rad((1:90)/2))*2) + 10, 
+                 rep(10, 90)),
+        measure = factor(c(rep("Subtest 1", 90), 
+                           rep("Composite", 90), 
+                           rep("Subtest 2", 90)),
+                         levels = c("Subtest 1", 
+                                    "Composite", 
+                                    "Subtest 2")),
+        time = c(1:90, 1:90, 1:90)
+      ) %>% 
+        filter(round(correlation, 2) == .73) %>% 
+            # Create coordinate system with 10,10 as origin
+          ggplot(aes(x,y)) +
+            # x and y axes
+          geom_hline (yintercept = 10, size = 1) + 
+          geom_vline (xintercept = 10, size = 1) +
+            # 3 vectors, grouped by measure
+          geom_segment(aes(x = x, y = y, xend = xend, yend = yend, color = measure),
+                       arrow=arrow(length = unit(0.5,"cm"),angle=20),
+                       lineend = "butt", linejoin = "round") +
+            # Joins ends of three vectors to show perpendicular
+          geom_segment(aes(x = xend, y = yend, xend = composite_x, yend = composite_y)) +
+            # Outputs correlation of subtests at each degree
+          geom_text(aes(x = 11, y = 9.9, 
+                        label = paste0("Subtest correlation = cos(", 
+                                       degrees, ")= ", round(correlation,2)))) +
+            # Composite length
+          geom_text(aes(x = 12.3, y = composite_y, 
+                        label = paste("Composite = \n", round(composite_length, 2)))) +
+          coord_cartesian(xlim = c(10, 12.6)) + scale_y_continuous(limits = c(9.5, 12.6))
+```
+
+
+Geometric Interpretation
+========================================================
+class: small-code
+
+```{r vectors_ggplot, fig.width = 10, out.width = "100%",}
+  # Same plot as above, just at the correlation used in example
+        tibble(
+          # These give coordinates for end of vectors to be joined with geom_segment
+        subtest_1_x = rep(((cos(deg2rad(1:90)))*2 + 10), 3),
+        subtest_1_y = rep((sqrt(4 - ((cos(deg2rad(1:90)))*2)**2) + 10), 3),
+        composite_x = rep(rep(12, 90),3),
+        composite_y = rep((tan(deg2rad((1:90)/2))*2) + 10, 3),
+          # Correlation and corresponding degrees, to be output as text
+        correlation = rep(cos(deg2rad(1:90)), 3),
+        degrees = rep(1:90, 3),
+          # Length of composite vector
+        composite_length = rep((2 / cos(deg2rad((1:90)/2))) + 10, 3),
+          # Vector origins
+        x = rep(10, 270),
+        y = rep(10,270),
+          # Gives endpoint of each vector, to be separated by measures (3)
+        xend = c(((cos(deg2rad(1:90)))*2 + 10), 
+                  rep(12, 90), 
+                  rep(12,90)),
+        yend = c((sqrt(4 - ((cos(deg2rad(1:90)))*2)**2) + 10), 
+                 (tan(deg2rad((1:90)/2))*2) + 10, 
+                 rep(10, 90)),
+        measure = factor(c(rep("Subtest 1", 90), 
+                           rep("Composite", 90), 
+                           rep("Subtest 2", 90)),
+                         levels = c("Subtest 1", 
+                                    "Composite", 
+                                    "Subtest 2")),
+        time = c(1:90, 1:90, 1:90)
+      ) %>% 
+        filter(round(correlation, 2) == .73) %>% 
+            # Create coordinate system with 10,10 as origin
+          ggplot(aes(x,y)) +
+            # x and y axes
+          geom_hline (yintercept = 10, size = 1) + 
+          geom_vline (xintercept = 10, size = 1) +
+            # 3 vectors, grouped by measure
+          geom_segment(aes(x = x, y = y, xend = xend, yend = yend, color = measure),
+                       arrow=arrow(length = unit(0.5,"cm"),angle=20),
+                       lineend = "butt", linejoin = "round") +
+            # Joins ends of three vectors to show perpendicular
+          geom_segment(aes(x = xend, y = yend, xend = composite_x, yend = composite_y)) +
+            # Outputs correlation of subtests at each degree
+          geom_text(aes(x = 11, y = 9.9, 
+                        label = paste0("Subtest correlation = cos(", 
+                                       degrees, ")= ", round(correlation,2)))) +
+            # Composite length
+          geom_text(aes(x = 12.3, y = composite_y, 
+                        label = paste("Composite = \n", round(composite_length, 2)))) +
+          coord_cartesian(xlim = c(10, 12.6)) + scale_y_continuous(limits = c(9.5, 12.6))
+```
+
+***
+
+```{r standardized_score, echo = T}
+  # Same example as above to show composite calculation and plot are same
+composite_example <- combined_subtest_standardized_score_func(
+    raw_score_subtest_1 = 12, 
+    raw_score_subtest_2 = 12, 
+    mean_subtest_1 = 10, 
+    mean_subtest_2 = 10, 
+    correlation = .73, 
+    subtest_1_sd = 3, 
+    subtest_2_sd = 3, 
+    standardized_mean = 10, 
+    standardized_sd = 3
+)
+```
+
+The composite score using standardization formula is `r round( combined_subtest_standardized_score_func(
+    raw_score_subtest_1 = 12, 
+    raw_score_subtest_2 = 12, 
+    mean_subtest_1 = 10, 
+    mean_subtest_2 = 10, 
+    correlation = .73, 
+    subtest_1_sd = 3, 
+    subtest_2_sd = 3, 
+    standardized_mean = 10, 
+    standardized_sd = 3
+), 2)`
+
+Summary
+========================================================  
+
+Composite scores are more extreme than the average of subtest scores because:
+
+1. Regression to the mean- it is even more unlikely to have several unlikely scores
+
+Summary
+========================================================  
+
+Composite scores are more extreme than the average of subtest scores because:
+
+1. Regression to the mean- it is even more unlikely to have several unlikely scores
+2. Index calculation- composite index variance will be (almost always) less than subtests
+
+Summary
+========================================================  
+
+Composite scores are more extreme than the average of subtest scores because:
+
+1. Regression to the mean- it is even more unlikely to have several unlikely scores
+2. Index calculation- composite index variance will be (almost always) less than subtests
+3. Geometric- As correlation decreases, extremity increases
+
+Communicate to Stakeholders
+========================================================  
+
+```{r test_table_composite_question_summary1}
+  # Back to original example
+leiter_mock_data  %>%
+  table_print(caption = "NVIQ Subtests") %>% 
+  column_spec(1:3, width = '50em') %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+nviq  %>%
+  table_print(caption = "NVIQ") %>% 
+  column_spec(1:3, width = '50em') %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+```
+
+***
+
+1. Summarize findings
+
+Communicate to Stakeholders
+========================================================  
+
+```{r test_table_composite_question_summary2}
+  # Back to original example
+leiter_mock_data  %>%
+  table_print(caption = "NVIQ Subtests") %>% 
+  column_spec(1:3, width = '50em') %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+nviq  %>%
+  table_print(caption = "NVIQ") %>% 
+  column_spec(1:3, width = '50em') %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+```
+
+***
+
+1. Summarize findings
+2. Explain differences within categories
+
+Communicate to Stakeholders
+========================================================  
+
+```{r test_table_composite_question_summary3}
+  # Back to original example
+leiter_mock_data  %>%
+  table_print(caption = "NVIQ Subtests") %>% 
+  column_spec(1:3, width = '50em') %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+nviq  %>%
+  table_print(caption = "NVIQ") %>% 
+  column_spec(1:3, width = '50em') %>% 
+  column_spec(., 3, border_left = "2px solid #D7261E",
+            border_right = "2px solid #D7261E")
+
+```
+
+***
+
+1. Summarize findings
+2. Explain differences within categories
+3. Repeated small differences become bigger
+
+Resources
+========================================================  
+
+- Schneider, W. J. (2016). Why Are WJ IV Cluster Scores More Extreme Than the Average of Their Parts? A Gentle Explanation of the Composite Score Extremity Effect (Woodcock-Johnson IV Assessment Service Bulletin No. 7). Houghton Mifflin Harcourt.
+
+- Brian Syzdek: Product Manager, Stoelting Psychology | bsyzdek@stoeltingco.com
